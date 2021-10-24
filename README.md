@@ -2,6 +2,59 @@
 
 Here are some Home Assistant YAMLs.
 
+Here's an ESPHome yaml to a light switch that works even when it's offline.
+```
+esphome:
+  name: light_mn_kitnook_kitnook
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: "YOUR_SSID"
+  password: "YOUR_PASSWORD"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Light Mn Kitnook Kitnook"
+    password: "PASSWORD"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO2
+      mode: INPUT_PULLUP
+      inverted: True
+    id: button_1
+    on_press:
+      then:
+        - light.toggle: light_1
+
+  - platform: status
+    name: "light_mn_kitnook_kitnook"
+
+output:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      inverted: True
+    id: relay_1
+
+light:
+  - platform: binary
+    name: "light_mn_kitnook_kitnook"
+    id: light_1
+    output: relay_1
+```
+
 Here's an automation to have a Google Nest say something in French when an ESP8266 is turned on.
 ```
 alias: jadore le pu pu
